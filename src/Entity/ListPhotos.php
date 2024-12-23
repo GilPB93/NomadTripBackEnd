@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\LsitPhotosRepository;
+use App\Repository\ListPhotosRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LsitPhotosRepository::class)]
-class LsitPhotos
+#[ORM\Entity(repositoryClass: ListPhotosRepository::class)]
+class ListPhotos
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,7 +14,7 @@ class LsitPhotos
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $imageURL = null;
+    private ?string $imageUrl = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $addedAt = null;
@@ -24,14 +24,14 @@ class LsitPhotos
         return $this->id;
     }
 
-    public function getImageURL(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageURL;
+        return $this->imageUrl;
     }
 
-    public function setImageURL(string $imageURL): static
+    public function setImageUrl(string $imageUrl): static
     {
-        $this->imageURL = $imageURL;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }

@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\LsitPhotos;
+use App\Entity\ListPhotos;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<LsitPhotos>
+ * @extends ServiceEntityRepository<ListPhotos>
  */
-class LsitPhotosRepository extends ServiceEntityRepository
+class ListPhotosRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, LsitPhotos::class);
+        parent::__construct($registry, ListPhotos::class);
     }
 
 //    /**
-//     * @return LsitPhotos[] Returns an array of LsitPhotos objects
+//     * @return ListPhotos[] Returns an array of ListPhotos objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -31,7 +31,7 @@ class LsitPhotosRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?LsitPhotos
+//    public function findOneBySomeField($value): ?ListPhotos
 //    {
 //        return $this->createQueryBuilder('l')
 //            ->andWhere('l.exampleField = :val')
