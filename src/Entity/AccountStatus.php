@@ -28,8 +28,13 @@ class AccountStatus
 
     public function setStatus(string $status): static
     {
-        $this->status = $status;
+        $validStatus = ['Active', 'Inactive'];
 
+        if (!in_array($status, $validStatus)) {
+            throw new \InvalidArgumentException("Invalid status name: $status");
+        }
+
+        $this->status = $status;
         return $this;
     }
 }
