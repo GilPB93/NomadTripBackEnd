@@ -19,6 +19,9 @@ class ListSouvenirs
     #[ORM\Column(length: 255)]
     private ?string $what = null;
 
+    #[ORM\OneToOne(mappedBy: 'listSouvenirs', cascade: ['persist', 'remove'])]
+    private ?Travelbook $travelbook = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,28 @@ class ListSouvenirs
     public function setWhat(string $what): static
     {
         $this->what = $what;
+
+        return $this;
+    }
+
+    public function getTravelbook(): ?Travelbook
+    {
+        return $this->travelbook;
+    }
+
+    public function setTravelbook(?Travelbook $travelbook): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($travelbook === null && $this->travelbook !== null) {
+            $this->travelbook->setListSouvenirs(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($travelbook !== null && $travelbook->getListSouvenirs() !== $this) {
+            $travelbook->setListSouvenirs($this);
+        }
+
+        $this->travelbook = $travelbook;
 
         return $this;
     }

@@ -33,9 +33,9 @@ class SecurityController extends AbstractController
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: 'firstName', type: 'string', example: 'Thomas'),
-                    new OA\Property(property: 'lastName', type: 'string', example: 'Dupont'),
-                    new OA\Property(property: 'pseudo', type: 'string', example: 'TotoDupont'),
+                    new OA\Property(property: 'firstName', type: 'string', example: 'FirstNameExample'),
+                    new OA\Property(property: 'lastName', type: 'string', example: 'LastNameExample'),
+                    new OA\Property(property: 'pseudo', type: 'string', example: 'PseudoExample'),
                     new OA\Property(property: 'email', type: 'string', example: 'exemple@email.com'),
                     new OA\Property(property: 'password', type: 'string', example: 'Mot de passe')
                 ],
@@ -52,7 +52,8 @@ class SecurityController extends AbstractController
                         new OA\Property(property: 'user', type: 'string', example: 'Nom d\'utilisateur'),
                         new OA\Property(property: 'apiToken', type: 'string', example: '31a023e212f116124a36af14ea0c1c3806eb9378'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string', example: 'ROLE_USER')),
-                        new OA\Property(property: 'createdAt', type: 'string', format: 'date-time', example: '2021-09-30T14:00:00.000000Z')
+                        new OA\Property(property: 'createdAt', type: 'string', format: 'date-time', example: '2021-09-30T14:00:00.000000Z'),
+                        new OA\Property(property: 'updatedAt', type: 'string', format: 'date-time', example: '2021-09-30T14:00:00.000000Z')
                     ],
                     type: 'object'
                 )
@@ -64,6 +65,7 @@ class SecurityController extends AbstractController
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
         $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));
         $user->setCreatedAt(new \DateTimeImmutable());
+        $user->setUpdatedAt(new \DateTimeImmutable());
 
         $this->manager->persist($user);
         $this->manager->flush();

@@ -40,9 +40,9 @@ class UserController extends AbstractController
                 properties: [
                     new OA\Property(property: "firstName", type: "string", example: "Thomas"),
                     new OA\Property(property: "lastName", type: "string", example: "Dupont"),
-                    new OA\Property(property: "pseudo", type: "string", example: "pseudo"),
+                    new OA\Property(property: "pseudo", type: "string", example: "Dudupont"),
                     new OA\Property(property: "email", type: "string", example: "exemple@email.com"),
-                    new OA\Property(property: "password", type: "string", example: "password"),
+                    new OA\Property(property: "password", type: "string", example: "mdp"),
                 ],
                 type: "object"
             )
@@ -57,10 +57,11 @@ class UserController extends AbstractController
                         new OA\Property(property: "id", type: "integer", example: 1),
                         new OA\Property(property: "firstName", type: "string", example: "Thomas"),
                         new OA\Property(property: "lastName", type: "string", example: "Dupont"),
-                        new OA\Property(property: "pseudo", type: "string", example: "pseudo"),
+                        new OA\Property(property: "pseudo", type: "string", example: "Dudupont"),
                         new OA\Property(property: "email", type: "string", example: "exemple@email.com"),
                         new OA\Property(property: "accountStatus", type: "string", example: "ACTIF"),
                         new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                        new OA\Property(property: "updatedAt", type: "string", format: "date-time")
                     ],
                     type: "object"
                 )
@@ -71,6 +72,7 @@ class UserController extends AbstractController
     {
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
         $user->setAccountStatus(1);
+        $user->setroles(['ROLE_USER']);
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setUpdatedAt(new \DateTimeImmutable());
 

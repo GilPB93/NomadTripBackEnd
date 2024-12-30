@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,11 +42,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 56)]
     private ?string $pseudo = null;
 
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $apiToken;
+
+    #[ORM\OneToOne(inversedBy: 'userStatus', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?AccountStatus $userStatus = null;
+
+    /**
+     * @var Collection<int, ContactMessages>
+     */
+    #[ORM\OneToMany(targetEntity: ContactMessages::class, mappedBy: 'userContactMessages')]
+    private Collection $contactMessages;
+
+    /**
+     * @var Collection<int, ActivityLog>
+     */
+    #[ORM\OneToMany(targetEntity: ActivityLog::class, mappedBy: 'userActivityLog')]
+    private Collection $userActivityLog;
+
+    /**
+     * @var Collection<int, Travelbook>
+     */
+    #[ORM\OneToMany(targetEntity: Travelbook::class, mappedBy: 'userTravelbooks')]
+    private Collection $travelbooks;
+
+    /** @throws \Exception */
+    public function __construct()
+    {
+        $this->apiToken = bin2hex(random_bytes(20));
+        $this->contactMessages = new ArrayCollection();
+        $this->userActivityLog = new ArrayCollection();
+        $this->travelbooks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -82,7 +119,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-        $roles[] = 'ROLE_ADMIN';
 
         return array_unique($roles);
     }
@@ -180,4 +216,121 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(string $apiToken): static
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    public function getUserStatus(): ?AccountStatus
+    {
+        return $this->userStatus;
+    }
+
+    public function setUserStatus(AccountStatus $userStatus): static
+    {
+        $this->userStatus = $userStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContactMessages>
+     */
+    public function getContactMessages(): Collection
+    {
+        return $this->contactMessages;
+    }
+
+    public function addContactMessage(ContactMessages $contactMessage): static
+    {
+        if (!$this->contactMessages->contains($contactMessage)) {
+            $this->contactMessages->add($contactMessage);
+            $contactMessage->setUserContactMessages($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactMessage(ContactMessages $contactMessage): static
+    {
+        if ($this->contactMessages->removeElement($contactMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($contactMessage->getUserContactMessages() === $this) {
+                $contactMessage->setUserContactMessages(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActivityLog>
+     */
+    public function getUserActivityLog(): Collection
+    {
+        return $this->userActivityLog;
+    }
+
+    public function addUserActivityLog(ActivityLog $userActivityLog): static
+    {
+        if (!$this->userActivityLog->contains($userActivityLog)) {
+            $this->userActivityLog->add($userActivityLog);
+            $userActivityLog->setUserActivityLog($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserActivityLog(ActivityLog $userActivityLog): static
+    {
+        if ($this->userActivityLog->removeElement($userActivityLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userActivityLog->getUserActivityLog() === $this) {
+                $userActivityLog->setUserActivityLog(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Travelbook>
+     */
+    public function getTravelbooks(): Collection
+    {
+        return $this->travelbooks;
+    }
+
+    public function addTravelbook(Travelbook $travelbook): static
+    {
+        if (!$this->travelbooks->contains($travelbook)) {
+            $this->travelbooks->add($travelbook);
+            $travelbook->setUserTravelbooks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTravelbook(Travelbook $travelbook): static
+    {
+        if ($this->travelbooks->removeElement($travelbook)) {
+            // set the owning side to null (unless already changed)
+            if ($travelbook->getUserTravelbooks() === $this) {
+                $travelbook->setUserTravelbooks(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
 }

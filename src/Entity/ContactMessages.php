@@ -29,6 +29,9 @@ class ContactMessages
     #[ORM\Column]
     private ?\DateTimeImmutable $sentAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'contactMessages')]
+    private ?User $userContactMessages = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,4 +96,17 @@ class ContactMessages
 
         return $this;
     }
+
+    public function getUserContactMessages(): ?User
+    {
+        return $this->userContactMessages;
+    }
+
+    public function setUserContactMessages(?User $userContactMessages): static
+    {
+        $this->userContactMessages = $userContactMessages;
+
+        return $this;
+    }
+
 }

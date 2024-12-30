@@ -23,6 +23,9 @@ class ListPlaces
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $visiteDateTime = null;
 
+    #[ORM\OneToOne(mappedBy: 'listPlaces', cascade: ['persist', 'remove'])]
+    private ?Travelbook $travelbook = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,28 @@ class ListPlaces
     public function setVisiteDateTime(\DateTimeInterface $visiteDateTime): static
     {
         $this->visiteDateTime = $visiteDateTime;
+
+        return $this;
+    }
+
+    public function getTravelbook(): ?Travelbook
+    {
+        return $this->travelbook;
+    }
+
+    public function setTravelbook(?Travelbook $travelbook): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($travelbook === null && $this->travelbook !== null) {
+            $this->travelbook->setListPlaces(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($travelbook !== null && $travelbook->getListPlaces() !== $this) {
+            $travelbook->setListPlaces($this);
+        }
+
+        $this->travelbook = $travelbook;
 
         return $this;
     }

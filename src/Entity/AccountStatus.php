@@ -16,6 +16,10 @@ class AccountStatus
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 
+    #[ORM\OneToOne(mappedBy: 'userStatus', cascade: ['persist', 'remove'])]
+    private ?User $userStatus = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,4 +41,22 @@ class AccountStatus
         $this->status = $status;
         return $this;
     }
+
+    public function getUserStatus(): ?User
+    {
+        return $this->userStatus;
+    }
+
+    public function setUserStatus(User $userStatus): static
+    {
+        // set the owning side of the relation if necessary
+        if ($userStatus->getUserStatus() !== $this) {
+            $userStatus->setUserStatus($this);
+        }
+
+        $this->userStatus = $userStatus;
+
+        return $this;
+    }
+
 }

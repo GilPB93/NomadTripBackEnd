@@ -34,6 +34,21 @@ class Travelbook
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\OneToOne(inversedBy: 'travelbook', cascade: ['persist', 'remove'])]
+    private ?ListPlaces $listPlaces = null;
+
+    #[ORM\OneToOne(inversedBy: 'travelbook', cascade: ['persist', 'remove'])]
+    private ?ListFB $listFB = null;
+
+    #[ORM\OneToOne(inversedBy: 'travelbook', cascade: ['persist', 'remove'])]
+    private ?ListPhotos $listPhotos = null;
+
+    #[ORM\OneToOne(inversedBy: 'travelbook', cascade: ['persist', 'remove'])]
+    private ?ListSouvenirs $listSouvenirs = null;
+
+    #[ORM\ManyToOne(inversedBy: 'travelbooks')]
+    private ?User $userTravelbooks = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +134,66 @@ class Travelbook
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getListPlaces(): ?ListPlaces
+    {
+        return $this->listPlaces;
+    }
+
+    public function setListPlaces(?ListPlaces $listPlaces): static
+    {
+        $this->listPlaces = $listPlaces;
+
+        return $this;
+    }
+
+    public function getListFB(): ?ListFB
+    {
+        return $this->listFB;
+    }
+
+    public function setListFB(?ListFB $listFB): static
+    {
+        $this->listFB = $listFB;
+
+        return $this;
+    }
+
+    public function getListPhotos(): ?ListPhotos
+    {
+        return $this->listPhotos;
+    }
+
+    public function setListPhotos(?ListPhotos $listPhotos): static
+    {
+        $this->listPhotos = $listPhotos;
+
+        return $this;
+    }
+
+    public function getListSouvenirs(): ?ListSouvenirs
+    {
+        return $this->listSouvenirs;
+    }
+
+    public function setListSouvenirs(?ListSouvenirs $listSouvenirs): static
+    {
+        $this->listSouvenirs = $listSouvenirs;
+
+        return $this;
+    }
+
+    public function getUserTravelbooks(): ?User
+    {
+        return $this->userTravelbooks;
+    }
+
+    public function setUserTravelbooks(?User $userTravelbooks): static
+    {
+        $this->userTravelbooks = $userTravelbooks;
 
         return $this;
     }
