@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $apiToken;
 
     #[ORM\OneToOne(inversedBy: 'userStatus', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?AccountStatus $userStatus = null;
 
     /**
